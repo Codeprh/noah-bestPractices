@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+    <property name="logDir" value="./logs"/>
+    <property name="app.name" value="common-mistakes"/>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%-5level] [%logger{40}:%line] - %msg%n</pattern>
+        </layout>
+    </appender>
+
+    <appender name="INFO_FILE" class="ch.qos.logback.core.FileAppender">
+        <File>${logDir}/${app.name}_info.log</File>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+            <!--解决方案：只接受INFO级别的日志-->
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%-5level] [%logger{40}:%line] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.FileAppender">
+        <File>${logDir}/${app.name}_error.log</File>
+
+        <!--        OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL-->
+        <!--        使用 ThresholdFilter 来过滤日 志，过滤级别设置为 WARN，目的是把 WARN 以上级别的日志记录到另一个 _error.log 文件中-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%-5level] [%logger{40}:%line] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+
+</configuration>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+    <property name="logDir" value="./logs"/>
+    <property name="app.name" value="common-mistakes"/>
+    <!--    第一个 ConsoleAppender，用于把所有日志输出到控制台-->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%-5level] [%logger{40}:%line] - %msg%n</pattern>
+        </layout>
+    </appender>
+
+    <appender name="INFO_FILE" class="ch.qos.logback.core.FileAppender">
+        <!--        定义了一个 FileAppender，用于记录文件日志，并定义了文件名、记录 日志的格式和编码等信息-->
+        <File>${logDir}/${app.name}_info.log</File>
+        <!--         LevelFilter 过滤日志， 将过滤级别设置为 INFO，目的是希望 _info.log 文件中可以记录 INFO 级别的日志-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%-5level] [%logger{40}:%line] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <appender name="ERROR_FILE" class="ch.qos.logback.core.FileAppender">
+        <File>${logDir}/${app.name}_error.log</File>
+        <!--        使用 ThresholdFilter 来过滤日 志，过滤级别设置为 WARN，目的是把 WARN 以上级别的日志记录到另一个 _error.log 文件中-->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>WARN</level>
+        </filter>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%thread] [%-5level] [%logger{40}:%line] - %msg%n</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+    </appender>
+
+    <!--	定义的 root 引用了三个 Appender-->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="INFO_FILE"/>
+        <appender-ref ref="ERROR_FILE"/>
+    </root>
+</configuration>
